@@ -10,7 +10,7 @@ $(function() {
 	var $window = $(window);
 	var $usernameInput = $('.usernameInput');
 	var $usernameButton = $('.usernameButton');
-  var $getWordButton = $('.getWordButton');
+  	var $initScrabbleArray = $('.initScrabbleArray');
 
 	var $loginPage = $('.login.page');
 	var $gamePage = $('.game.page');
@@ -107,7 +107,7 @@ $(function() {
   		}
   	});
 
-    $getWordButton.click(() => {
+    $initScrabbleArray.click(() => {
       numLetters.forEach(addLetters);
       console.log(wordset.toString());
     });
