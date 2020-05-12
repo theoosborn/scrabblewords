@@ -10,7 +10,8 @@ $(function() {
 	var $window = $(window);
 	var $usernameInput = $('.usernameInput');
 	var $usernameButton = $('.usernameButton');
-  	var $initScrabbleArray = $('.initScrabbleArray');
+	var $initScrabbleArray = $('.initScrabbleArray');
+	var $getNextLetter = $('.getNextLetter');  
 
 	var $loginPage = $('.login.page');
 	var $gamePage = $('.game.page');
@@ -87,12 +88,23 @@ $(function() {
 
   	var wordset = []; 
   	function addLetters(item, index) {
-      var repeatLetter = item;
+	  var repeatLetter = item;
+	  // Add correct number of each letter for a scrabble game
       while (repeatLetter > 0) {
 		  	wordset.push(alphabet[index]);
         repeatLetter--;
-      }
-  	}
+	  }
+	  // Shuffle the array so you can't predict which letter you'll get
+	  shuffleArray(wordset);
+	}
+	  
+	function pickLetter() {
+		if (wordset.length != 0) {
+			console.log(wordset.pop());
+		} else {
+			console.log("Either the wordset array has not been initialised or you've run out of letters!");
+		}
+	} 
 
 
   	// Click events
@@ -110,7 +122,11 @@ $(function() {
     $initScrabbleArray.click(() => {
       numLetters.forEach(addLetters);
       console.log(wordset.toString());
-    });
+	});
+	
+	$getNextLetter.click(() => {
+		pickLetter();
+	});
 
   	// Socket events
 
