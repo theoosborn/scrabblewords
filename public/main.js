@@ -1,5 +1,4 @@
 $(function() {
-	var FADE_TIME = 150; //ms
 	var COLORS = [
 	    '#e21400', '#91580f', '#f8a700', '#f78b00',
     	'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
@@ -15,6 +14,7 @@ $(function() {
 
 	var $loginPage = $('.login.page');
 	var $gamePage = $('.game.page');
+	var $messages = $('.messages');
 
 	// Prompt for setting a username
 	var username;
@@ -41,7 +41,7 @@ $(function() {
 		// if it's valid...
 		if (username) {
 			$loginPage.fadeOut();
-			$gamePage.show();
+			$gamePage.fadeIn();
 			$loginPage.off('click');
 
 			// tell the server the username
@@ -51,7 +51,10 @@ $(function() {
 
 	// Log a message
 	const log = (message, options) => {
-		var $el = $('<p>').addClass('log').text(message);
+		/* var $el = $('<p>').addClass('log').text(message); 
+			Old code from buzzer app
+		*/
+		$messages.prepend("<p>" + message + "</p>");
 		
 	}
 
@@ -84,9 +87,8 @@ $(function() {
   	}
 
   	alphabet = 'abcdefghijklmnopqrstuvwxyz0'.split('');
-  	numLetters = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1, 2];
-
-  	var wordset = []; 
+	numLetters = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1, 2];
+	var wordset = [];
   	function addLetters(item, index) {
 	  var repeatLetter = item;
 	  // Add correct number of each letter for a scrabble game
@@ -94,14 +96,18 @@ $(function() {
 		  	wordset.push(alphabet[index]);
         repeatLetter--;
 	  }
-	  // Shuffle the array so you can't predict which letter you'll get
-	  shuffleArray(wordset);
 	}
 	  
 	function pickLetter() {
 		if (wordset.length != 0) {
-			console.log(wordset.pop());
+			var letterPicked = wordset.pop();
+			if (letterPicked == "0") {
+				letterPicked = "a blank";
+			}
+			$messages.prepend("<p class='message'> You got " + letterPicked + "</p>");
+			console.log(letterPicked);
 		} else {
+			$messages.prepend("<p class='messages'>Either the wordset array has not been initialised or you've run out of letters!</p>")
 			console.log("Either the wordset array has not been initialised or you've run out of letters!");
 		}
 	} 
@@ -120,8 +126,10 @@ $(function() {
   	});
 
     $initScrabbleArray.click(() => {
-      numLetters.forEach(addLetters);
-      console.log(wordset.toString());
+		numLetters.forEach(addLetters);
+		// Shuffle the array so you can't predict which letter you'll get
+		shuffleArray(wordset);
+		console.log(wordset.toString());
 	});
 	
 	$getNextLetter.click(() => {

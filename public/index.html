@@ -12,8 +12,17 @@
 	<body>
 		<h1>scrabble word helper</h1>
 
-		<button class="initScrabbleArray">initialise scrabble letter array</button>
-		<button class="getNextLetter">get next letter</button>
+		<div class="login page">
+			<p>Please enter your username here:</p>
+			<input class="usernameInput" type="text" maxlength="14" />
+			<button class="usernameButton">Submit</button>
+		</div>
+		<div class="game page" style="display: none">
+			<button class="initScrabbleArray">initialise scrabble letter array</button>
+			<button class="getNextLetter">get next letter</button>
+	
+			<p class="messages"></p>
+		</div>
 
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
