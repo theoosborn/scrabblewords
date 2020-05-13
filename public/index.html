@@ -2,26 +2,30 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>scrabblewords</title>
+		<title>scrabble word helper</title>
 		<meta name="description" content="A multiplayer scrabble word helper app">
 		<meta name="author" content="Theo Osborn">
 
-		<meta name="viewport" content="minimum-scale=1.0">
-
+		<meta name="viewport" content="width=device.width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<h1>scrabble word helper</h1>
-
-		<div class="login page">
-			<p>Please enter your username here:</p>
-			<input class="usernameInput" type="text" maxlength="14" />
-			<button class="usernameButton">Submit</button>
+		<div class="header">
+			<h1>crabble</h1>
 		</div>
-		<div class="game page" style="display: none">
-			<button class="initScrabbleArray">initialise scrabble letter array</button>
-			<button class="getNextLetter">get next letter</button>
-	
-			<p class="messages"></p>
+		<div class="main">
+			<div class="login page">
+				<p>Please enter your username here:</p>
+				<input class="usernameInput" type="text" maxlength="14" />
+				<button class="button usernameButton">Submit</button>
+			</div>
+			<div class="game page" style="display: none">
+				<button class="initScrabbleArray">initialise scrabble letter list</button>
+				<button class="getNextLetter">get next letter</button>
+				<button class="resetButton">reset the game</button>
+		
+				<p class="messages"></p>
+			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
