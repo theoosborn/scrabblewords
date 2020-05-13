@@ -117,7 +117,7 @@ $(function() {
   	});
 
   	socket.on('user has joined', (data) => {
-  		sendMsg(data.username + ' joined', "sys");
+  		sendMsg(data.username + ' joined.', "sys");
   		addParticipantsMessage(data);
   	});
 	
@@ -126,7 +126,7 @@ $(function() {
 	});
 
   	socket.on('user has left', (data) => {
-  		sendMsg(data.username + ' left');
+  		sendMsg(data.username + ' left.', "sys");
   		addParticipantsMessage(data);
   	});
 
