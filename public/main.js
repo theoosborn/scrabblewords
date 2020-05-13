@@ -10,7 +10,9 @@ $(function() {
 	var $usernameInput = $('.usernameInput');
 	var $usernameButton = $('.usernameButton');
 	var $initScrabbleArray = $('.initScrabbleArray');
-	var $getNextLetter = $('.getNextLetter');  
+	var $getNextLetter = $('.getNextLetter');
+	var $resetButton = $('.resetButton');  
+	var $loginForm = $('.loginForm');
 
 	var $loginPage = $('.login.page');
 	var $gamePage = $('.game.page');
@@ -23,14 +25,18 @@ $(function() {
 
 	var socket = io();
 
+	const sendMsg = (data, type) => {
+		$messages.prepend("<p class='message " + type + "'>" + data + "</p>");
+	}
+	
 	const addParticipantsMessage = (data) => {
 		var message = '';
 		if (data.numUsers === 1) {
-			message += "there's 1 participant";
+			message += "There's 1 participant.";
 		} else {
-			message += "there are " + data.numUsers + " participants";
+			message += "There are " + data.numUsers + " participants.";
 		}
-		log(message);
+		sendMsg(message);
 	}
 
 	// sets username for client
@@ -49,15 +55,6 @@ $(function() {
 		}
 	}
 
-	// Log a message
-	const log = (message, options) => {
-		/* var $el = $('<p>').addClass('log').text(message); 
-			Old code from buzzer app
-		*/
-		$messages.prepend("<p>" + message + "</p>");
-		
-	}
-
 	// Prevents input from having injected markup
 	const cleanInput = (input) => {
     	return $('<div/>').text(input).html();
@@ -69,48 +66,12 @@ $(function() {
   		for (var i = 0; i < username.length; i++) {
   			hash = username.charCodeAt(i) + (hash << 5) - hash;
   		}
-  		// Calculate color
+  		// Calculate colour
   		var index = Math.abs(hash % COLORS.length);
   		return COLORS[index];
   	}
 
-  	// Scrabble game code
-
-
-	// Initialise the list of letters  	
-  	// Durstenfeld shuffle the array
-  	function shuffleArray(array) {
-  		for (let i = array.length - 1; i > 0; i--) {
-  			const j = Math.floor(Math.random() * (i + 1));
-  			[array[i], array[j]] = [array[j], array[i]];
-  		}
-  	}
-
-  	alphabet = 'abcdefghijklmnopqrstuvwxyz0'.split('');
-	numLetters = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1, 2];
-	var wordset = [];
-  	function addLetters(item, index) {
-	  var repeatLetter = item;
-	  // Add correct number of each letter for a scrabble game
-      while (repeatLetter > 0) {
-		  	wordset.push(alphabet[index]);
-        repeatLetter--;
-	  }
-	}
-	  
-	function pickLetter() {
-		if (wordset.length != 0) {
-			var letterPicked = wordset.pop();
-			if (letterPicked == "0") {
-				letterPicked = "a blank";
-			}
-			$messages.prepend("<p class='message'> You got " + letterPicked + "</p>");
-			console.log(letterPicked);
-		} else {
-			$messages.prepend("<p class='messages'>Either the wordset array has not been initialised or you've run out of letters!</p>")
-			console.log("Either the wordset array has not been initialised or you've run out of letters!");
-		}
-	} 
+  	// Scrabble game code starts here
 
 
   	// Click events
@@ -118,58 +79,79 @@ $(function() {
   	$loginPage.click(() => {
   		$currentInput.focus();
   	});
-
+	
   	$usernameButton.click(() => {
   		if (!username) {
   			setUsername();
   		}
-  	});
-
+	  });
+	
     $initScrabbleArray.click(() => {
-		numLetters.forEach(addLetters);
-		// Shuffle the array so you can't predict which letter you'll get
-		shuffleArray(wordset);
-		console.log(wordset.toString());
+		/* 
+		old code
+		if (wordset.length == 0){
+			numLetters.forEach(addLetters);
+			// Shuffle the array so you can't predict which letter you'll get
+			shuffleArray(wordset);
+			console.log(wordset.toString());
+		} else {
+			console.log("Wordset already exists");
+		}
+		*/
+		socket.emit('wordset init');
 	});
 	
 	$getNextLetter.click(() => {
-		pickLetter();
+		socket.emit('letter picked');
+	});
+
+	$resetButton.click(() => {
+		socket.emit('reset');
 	});
 
   	// Socket events
 
   	socket.on('login', (data) => {
   		connected = true;
-  		var message = "Welcome to scrabblewords!";
-  		log(message, { prepend: true });
   		addParticipantsMessage(data);
   	});
 
-  	socket.on('user joined', (data) => {
-  		log(data.username + ' joined');
+  	socket.on('user has joined', (data) => {
+  		sendMsg(data.username + ' joined', "sys");
   		addParticipantsMessage(data);
   	});
+	
+	socket.on('send message', (data) => {
+		sendMsg(data.message);
+	});
 
-
-  	socket.on('user left', (data) => {
-  		log(data.username + ' left');
+  	socket.on('user has left', (data) => {
+  		sendMsg(data.username + ' left');
   		addParticipantsMessage(data);
   	});
 
   	socket.on('disconnect', () => {
-  		log('you have been disconnected');
+  		sendMsg('You have been disconnected.', "sys");
   	});
 
   	socket.on('reconnect', () => {
-  		log('you have been reconnected');
+  		sendMsg('You have been reconnected.', "sys");
   		if (username) {
   			socket.emit('add user', username);
   		}
   	});
 
   	socket.on('reconnect error', () => {
-  		log('attempt to reconnect has failed');
-  	});
+  		sendMsg('Attempt to reconnect has failed.', "sys");
+	});
+	
+	socket.on('letter picked', (data) => {
+		if (data.username == username){
+			sendMsg("You have picked up <span class='tile'>" + data.message + "</span>.")
+		} else {
+			sendMsg(data.username + " has picked up a letter.");
+		}
+	});
 
 
 });
