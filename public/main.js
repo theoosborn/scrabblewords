@@ -27,7 +27,7 @@ $(function() {
 
 	const sendMsg = (data, type) => {
 		$messages.prepend("<p class='message " + type + "'>" + data + "</p>");
-	}
+	};
 	
 	const addParticipantsMessage = (data) => {
 		var message = '';
@@ -37,7 +37,7 @@ $(function() {
 			message += "There are " + data.numUsers + " participants.";
 		}
 		sendMsg(message);
-	}
+	};
 
 	// sets username for client
 
@@ -53,12 +53,12 @@ $(function() {
 			// tell the server the username
 			socket.emit('add user', username);
 		}
-	}
+	};
 
 	// Prevents input from having injected markup
 	const cleanInput = (input) => {
     	return $('<div/>').text(input).html();
-  	}
+  	};
 
   	const getUsernameColor = (username) => {
   		// Compute hash code
@@ -69,7 +69,7 @@ $(function() {
   		// Calculate colour
   		var index = Math.abs(hash % COLORS.length);
   		return COLORS[index];
-  	}
+  	};
 
   	// Scrabble game code starts here
 
@@ -147,7 +147,7 @@ $(function() {
 	
 	socket.on('letter picked', (data) => {
 		if (data.username == username){
-			sendMsg("You have picked up <span class='tile'>" + data.message + "</span>.")
+			sendMsg("You have picked up <span class='tile'>" + data.message + "</span>.");
 		} else {
 			sendMsg(data.username + " has picked up a letter.");
 		}

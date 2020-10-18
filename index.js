@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
 		$messages.prepend("<p class='message'>Either the wordset array has not been initialised or you've run out of letters!</p>")
 		console.log("Either the wordset array has not been initialised or you've run out of letters!");
 		*/
-	} 
+	}; 
 
 
 	var addedUser = false;
@@ -136,5 +136,5 @@ io.on('connection', (socket) => {
 			username: socket.username,
 			message: socket.username + " has reset the game."
 		});
-	})
+	});
 });
