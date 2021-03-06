@@ -50,23 +50,23 @@ const pickLetter = () => {
 
 io.on('connection', (socket) => {
 
-    let addedUser = false;
+    let loggedIn = false;
 
     // Server functions
 
     socket.on('add_user', (username) => {
-        if (addedUser) return;
+        if (loggedIn) return;
 
         // store the username in the socket session for this client
         socket.username = username;
         ++numUsers;
-        addedUser = true;
+        loggedIn = true;
 
         // Emit to user who joined the new number of users.
         socket.emit('login', {
             numUsers: numUsers
         });
-        // Emit globally that a person has connected.
+        // Emit to all but the sender that a person has connected.
         socket.broadcast.emit('user has joined', {
             username: socket.username,
             numUsers: numUsers
@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        if (addedUser) {
+        if (loggedIn) {
             --numUsers;
 
             // Reset the game if everybody has left.
