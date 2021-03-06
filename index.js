@@ -48,7 +48,6 @@ const pickLetter = () => {
     return letterPicked;
 };
 
-
 io.on('connection', (socket) => {
 
     let addedUser = false;
@@ -62,10 +61,12 @@ io.on('connection', (socket) => {
         socket.username = username;
         ++numUsers;
         addedUser = true;
+
+        // Emit to user who joined the new number of users.
         socket.emit('login', {
             numUsers: numUsers
         });
-        // echo globally that a person has connected
+        // Emit globally that a person has connected.
         socket.broadcast.emit('user has joined', {
             username: socket.username,
             numUsers: numUsers

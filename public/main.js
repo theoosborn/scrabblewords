@@ -23,7 +23,7 @@ $(function() {
     };
 
     const addParticipantsMessage = (data) => {
-        var message = '';
+        let message = '';
         if (data.numUsers === 1) {
             message += "There's 1 participant.";
         } else {
