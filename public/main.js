@@ -44,7 +44,7 @@ $(function() {
             loginPage.off('click');
 
             // tell the server the username
-            socket.emit('add user', username);
+            socket.emit('add_user', username);
         }
     };
 
@@ -69,17 +69,6 @@ $(function() {
     });
 
     initScrabbleArray.click(() => {
-        /* 
-        old code
-        if (wordset.length == 0){
-            numLetters.forEach(addLetters);
-            // Shuffle the array so you can't predict which letter you'll get
-            shuffleArray(wordset);
-            console.log(wordset.toString());
-        } else {
-            console.log("Wordset already exists");
-        }
-        */
         socket.emit('wordset init');
     });
 
@@ -119,7 +108,7 @@ $(function() {
     socket.on('reconnect', () => {
         sendMsg('You have been reconnected.', "sys");
         if (username) {
-            socket.emit('add user', username);
+            socket.emit('add_user', username);
         }
     });
 
