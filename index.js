@@ -1,13 +1,12 @@
 // Setup express server
-var express = require('express');
-var app = express();
-var path = require('path');
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
-var port = process.env.PORT || 3001;
+const express = require('express');
+const app = express();
+const path = require('path');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
-server.listen(port, () => {
-    console.log('Server listening at port %d', port);
+http.listen(3001, () => {
+    console.log('Server listening at port 3001');
 });
 
 // Routing
@@ -18,17 +17,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 var numUsers = 0;
 
 // Game functions
-var wordset = [];
+var randomisedLetters = []; // The letters available to players in the game. They have been randomised.
 
-const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0"];
+const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", 
+                  "U", "V", "W", "X", "Y", "Z", "0"];
 const numLetters = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1, 2];
+
 function addLetters(item, index) {
     var repeatLetter = item;
     // Add correct number of each letter for a scrabble game
     while (repeatLetter > 0) {
-            wordset.push(alphabet[index]);
+        randomisedLetters.push(alphabet[index]);
         repeatLetter--;
-  }
+    }
 }
 
 // Durstenfeld shuffle the array
@@ -39,36 +40,22 @@ function shuffleArray(array) {
     }
 }
 
+const pickLetter = () => {
+    let letterPicked = randomisedLetters.pop();
+    if (letterPicked == "0") {
+        letterPicked = "&#10240;";
+    }
+    return letterPicked;
+};
 
 
 io.on('connection', (socket) => {
 
-    // Some game code
-    const pickLetter = () => {
-        var letterPicked = wordset.pop();
-        if (letterPicked == "0") {
-            letterPicked = "&#10240;";
-        }
-        return letterPicked;
-        /* old code
-        $messages.prepend("<p class='message'>Either the wordset array has not been initialised or you've run out of letters!</p>")
-        console.log("Either the wordset array has not been initialised or you've run out of letters!");
-        */
-    };
-
-
-    var addedUser = false;
+    let addedUser = false;
 
     // Server functions
 
-    socket.on('new message', (data) => {
-        socket.broadcast.emit('new message', {
-            username: socket.username,
-            message: data
-        });
-    });
-
-    socket.on('add user', (username) => {
+    socket.on('add_user', (username) => {
         if (addedUser) return;
 
         // store the username in the socket session for this client
@@ -89,6 +76,11 @@ io.on('connection', (socket) => {
         if (addedUser) {
             --numUsers;
 
+            // Reset the game if everybody has left.
+            if (numUsers.length === 0) {
+                randomisedLetters = [];
+            }
+
             // echo globally that this client has left
             socket.broadcast.emit('user has left', {
                 username: socket.username,
@@ -98,14 +90,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('wordset init', () => {
-        if (wordset.length == 0) {
+        if (randomisedLetters.length === 0) {
+
             numLetters.forEach(addLetters);
-            // Shuffle the array
-            shuffleArray(wordset);
+            shuffleArray(randomisedLetters);
+
             io.emit('send message', {
                 username: socket.username,
-                message: socket.username + " has initialised the wordset"
+                message: socket.username + " has initialised the wordset."
             });
+
         } else {
             io.emit('send message', {
                 username: socket.username,
@@ -115,23 +109,23 @@ io.on('connection', (socket) => {
     });
 
     socket.on('letter picked', () => {
-        if (wordset.length != 0) {
-            var letterPicked = pickLetter();
+        if (randomisedLetters.length !== 0) {
             io.emit('letter picked', {
                 username: socket.username,
-                message: letterPicked
+                message: pickLetter()
             });
         } else {
             io.emit('send message', {
                 username: socket.username,
-                message: socket.username + " attempted to get a letter but either the wordset array has not been initialised or you've run out of letters!"
+                message: socket.username + " attempted to get a letter but either the wordset array has not been " +
+                                           "initialised or you've run out of letters!"
             });
         }
 
     });
 
     socket.on('reset', () => {
-        wordset = [];
+        randomisedLetters = [];
         io.emit('send message', {
             username: socket.username,
             message: socket.username + " has reset the game."
