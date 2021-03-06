@@ -5,7 +5,7 @@ $(function() {
     var usernameButton = $('.usernameButton');
     var initScrabbleArray = $('.initScrabbleArray');
     var getNextLetter = $('.getNextLetter');
-    var resetButton = $('.resetButton');  
+    var resetButton = $('.resetButton');
 
     var loginPage = $('.login.page');
     var gamePage = $('.game.page');
