@@ -111,9 +111,13 @@ io.on('connection', (socket) => {
 
     socket.on('letter picked', () => {
         if (randomisedLetters.length !== 0) {
-            io.emit('letter picked', {
-                username: socket.username,
+            // Emit message to client who picked letter.
+            socket.emit('you_picked_letter', {
                 message: pickLetter()
+            });
+            // Emit message to all other than client.
+            socket.broadcast.emit('someone_picked_letter', {
+                username: socket.username
             });
         } else {
             io.emit('send message', {

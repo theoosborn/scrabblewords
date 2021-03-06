@@ -116,11 +116,11 @@ $(function() {
         sendMsg('Attempt to reconnect has failed.', "sys");
     });
 
-    socket.on('letter picked', (data) => {
-        if (data.username == username){
-            sendMsg("You have picked up <span class='tile'>" + data.message + "</span>.");
-        } else {
-            sendMsg(data.username + " has picked up a letter.");
-        }
+    socket.on('someone_picked_letter', (data) => {
+        sendMsg(data.username + " has picked up a letter.");
+    });
+
+    socket.on('you_picked_letter', (data) => {
+        sendMsg("You have picked up <span class='tile'>" + data.message + "</span>.");
     });
 });
