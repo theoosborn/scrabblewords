@@ -1,16 +1,15 @@
 // Setup express server
-const express = require('express');
-const app = express();
-const path = require('path');
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-
-http.listen(3001, () => {
-    console.log('Server listening at port 3001');
+const httpServer = require("http").createServer();
+const io = require('socket.io')(httpServer, {
+    cors: {
+        origin: "http://localhost:8080",
+        methods: ["GET", "POST"]
+    }
 });
 
-// Routing
-app.use(express.static(path.join(__dirname, 'public')));
+httpServer.listen(3001, () => {
+    console.log('Server listening at port 3001');
+});
 
 // Scrabble room
 
