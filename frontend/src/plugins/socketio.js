@@ -11,7 +11,7 @@ function initialiseSocket() {
         `http://${networkIP}:${port}` :
         `http://${localIP}:${port}`;
 
-    socket = io(url);
+    socket = io(url, { autoConnect: false });
 }
 
 export function addEventListener(event) {
