@@ -12,6 +12,10 @@ function initialiseSocket() {
         `http://${localIP}:${port}`;
 
     socket = io(url, { autoConnect: false });
+
+    socket.onAny((event, ...args) => {
+      console.log(event, args);
+    });
 }
 
 export function addEventListener(event) {
