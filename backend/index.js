@@ -60,17 +60,13 @@ io.use((socket, next) => {
 
 io.on('connection', (socket) => {
 
-    let loggedIn = false;
-
     // Server functions
 
     socket.on('add_user', (username) => {
-        if (loggedIn) return;
 
         // store the username in the socket session for this client
         socket.username = username;
         ++numUsers;
-        loggedIn = true;
 
         // Emit to user who joined the new number of users.
         socket.emit('login', {
@@ -84,20 +80,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        if (loggedIn) {
-            --numUsers;
+        --numUsers;
 
-            // Reset the game if everybody has left.
-            if (numUsers.length === 0) {
-                randomisedLetters = [];
-            }
-
-            // echo globally that this client has left
-            socket.broadcast.emit('user has left', {
-                username: socket.username,
-                numUsers: numUsers
-            });
+        // Reset the game if everybody has left.
+        if (numUsers.length === 0) {
+            randomisedLetters = [];
         }
+
+        // echo globally that this client has left
+        socket.broadcast.emit('user has left', {
+            username: socket.username,
+            numUsers: numUsers
+        });
     });
 
     socket.on('wordset init', () => {
