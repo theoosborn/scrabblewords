@@ -39,13 +39,13 @@ function shuffleArray(array) {
     }
 }
 
-const pickLetter = () => {
+function pickLetter() {
     let letterPicked = randomisedLetters.pop();
     if (letterPicked == "0") {
         letterPicked = "&#10240;";
     }
     return letterPicked;
-};
+}
 
 io.on('connection', (socket) => {
 
