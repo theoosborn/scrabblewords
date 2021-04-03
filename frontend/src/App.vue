@@ -23,7 +23,7 @@ export default {
     return {
       test: true,
       isLoggedIn: false,
-      connectError: ""
+      connectError: null
     }
   },
   methods: {
@@ -34,7 +34,7 @@ export default {
     }
   },
   created() {
-    socket.on("connect_error", (err) => {
+    socket.on("connect_error", err => {
       this.connectError = err;
     });
   }

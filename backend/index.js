@@ -47,6 +47,17 @@ function pickLetter() {
     return letterPicked;
 }
 
+// Middleware to handle login.
+io.use((socket, next) => {
+    const username = socket.handshake.auth.username;
+    if (!username || username.length > 32) {
+        return next(new Error("Invalid username"));
+    }
+    socket.username = username;
+    next();
+});
+
+
 io.on('connection', (socket) => {
 
     let loggedIn = false;
