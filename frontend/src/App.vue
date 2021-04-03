@@ -36,6 +36,7 @@ export default {
   created() {
     socket.on("connect_error", err => {
       this.connectError = err;
+      this.isLoggedIn = false;
     });
   }
 }
