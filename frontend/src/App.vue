@@ -3,7 +3,7 @@
     <header class="header">
         <h1>crabble</h1>
     </header>
-    <SelectUsername :error="connectError" v-if="!isLoggedIn" @login-request="onUsernameSelection" />
+    <SelectUsername :error="connectError" v-if="!isLoggedIn" @submit="onUsernameSelection" />
     <div v-else>
       <li v-for="message in serverOutput" v-bind:key="message.received">{{ message }}</li>
     </div>

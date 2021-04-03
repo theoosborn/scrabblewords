@@ -4,7 +4,7 @@
             <input v-model="username" type="text" id="name" required>
         </label>
         <p v-if="error" class="error">{{ error }}</p>
-        <button :disabled="!isValid" @click="login()">Login</button>
+        <button :disabled="!isValid" @click="submit()">Login</button>
     </div>
 </template>
 
