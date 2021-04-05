@@ -1,18 +1,22 @@
 <template>
   <div>
-    <h2>users</h2>
+    <h2>Users</h2>
     <ul>
-      <player v-for="player in players" v-bind:key="player.userID" :player="player" />
+      <player v-for="player in players" :key="player.userID" :player="player" />
     </ul>
-    <h2>log</h2>
+    <h2>Log</h2>
     <ul>
-      <li v-for="message in messages" v-bind:key="message.localID">
+      <li v-for="message in messages" :key="message.localID">
         {{ message.timestamp.toLocaleTimeString('en-GB') }} - {{ message.message }}
       </li>
     </ul>
     <button @click="initialiseLetterset()">Initialise letterset</button>
     <button @click="getLetter()">Get letter</button>
     <button @click="reset()">Reset</button>
+    <h2>Letter History</h2>
+    <ul>
+      <li v-for="letter in usedLetters" :key="letter.id">{{ letter.name }}</li>
+    </ul>
   </div>
 </template>
 
@@ -28,7 +32,8 @@ export default {
   data () {
     return {
       players: [],
-      messages: []
+      messages: [],
+      usedLetters: []
     };
   },
   created () {
@@ -63,6 +68,10 @@ export default {
     });
 
     socket.on('picked letter', (letter) => {
+      this.usedLetters.push({
+        id: Date.now(),
+        name: letter
+      });
       this.addMessage(`You picked up ${letter}.`);
     });
 
