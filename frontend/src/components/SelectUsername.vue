@@ -3,8 +3,8 @@
         <label>Please enter your username: 
             <input v-model="username" type="text" id="name" required>
         </label>
-        <small v-if="error" class="error">{{ error.message }}</small>
         <button :disabled="!isValid" @click="submit()">Login</button>
+        <p v-if="error" class="error">{{ error.message }}</p>
     </div>
 </template>
 
