@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import SelectUsername from "./components/SelectUsername.vue";
-import Game from "./components/Game.vue"
-import socket from "./plugins/socketio.js";
+import SelectUsername from './components/SelectUsername.vue';
+import Game from './components/Game.vue';
+import socket from './plugins/socketio.js';
 
 export default {
   name: 'App',
@@ -24,27 +24,27 @@ export default {
     SelectUsername,
     Game
   },
-  data: function() {
+  data: function () {
     return {
       isLoggedIn: false,
       connectError: null,
       messages: []
-    }
+    };
   },
   methods: {
-    onUsernameSelection(username) {
+    onUsernameSelection (username) {
       this.isLoggedIn = true;
       socket.auth = { username };
       socket.connect();
     }
   },
-  created() {
-    socket.on("connect_error", err => {
+  created () {
+    socket.on('connect_error', err => {
       this.connectError = err;
       this.isLoggedIn = false;
     });
   }
-}
+};
 </script>
 
 <style>

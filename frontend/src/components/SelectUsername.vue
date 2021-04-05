@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label>Please enter your username: 
+        <label>Please enter your username:
             <input v-model="name" type="text" id="name" required>
         </label>
         <button :disabled="!isValid" @click="submit()">Login</button>
@@ -10,26 +10,26 @@
 
 <script>
 export default {
-    name: "SelectUsername",
-    data () {
-        return {
-            name: ""
-        }
-    },
-    props: {
-        error: Error
-    },
-    methods: {
-        submit() {
-            this.$emit("submit", this.name);
-        }
-    },
-    computed: {
-        isValid() {
-            return this.name.length > 0;
-        }
+  name: 'SelectUsername',
+  data () {
+    return {
+      name: ''
+    };
+  },
+  props: {
+    error: Error
+  },
+  methods: {
+    submit () {
+      this.$emit('submit', this.name);
     }
-}
+  },
+  computed: {
+    isValid () {
+      return this.name.length > 0;
+    }
+  }
+};
 </script>
 
 <style scoped>
