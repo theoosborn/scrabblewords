@@ -58,26 +58,21 @@ io.use((socket, next) => {
 });
 
 
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
+    const users = [];
+    for (let [id, socket] of io.of("/").sockets) {
+        users.push({
+            userID: id,
+            username: socket.username,
+        });
+    }
+    socket.emit("users", users);
+    socket.broadcast.emit("user connected", {
+        userID: socket.id,
+        username: socket.username
+    });
 
     // Server functions
-
-    socket.on('add_user', (username) => {
-
-        // store the username in the socket session for this client
-        socket.username = username;
-        ++numUsers;
-
-        // Emit to user who joined the new number of users.
-        socket.emit('login', {
-            numUsers: numUsers
-        });
-        // Emit to all but the sender that a person has connected.
-        socket.broadcast.emit('user has joined', {
-            username: socket.username,
-            numUsers: numUsers
-        });
-    });
 
     socket.on('disconnect', () => {
         --numUsers;

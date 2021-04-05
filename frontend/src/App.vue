@@ -3,32 +3,37 @@
     <header class="header">
         <h1>crabble</h1>
     </header>
-    <SelectUsername :error="connectError" v-if="!isLoggedIn" @submit="onUsernameSelection" />
+    <select-username :error="connectError" v-if="!isLoggedIn" @submit="onUsernameSelection" />
     <div v-else>
-      <li v-for="message in serverOutput" v-bind:key="message.received">{{ message }}</li>
+      <ul>
+        <li v-for="message in messages" v-bind:key="message.received">{{ message }}</li>
+      </ul>
+      <game />
     </div>
   </div>
 </template>
 
 <script>
 import SelectUsername from "./components/SelectUsername.vue";
+import Game from "./components/Game.vue"
 import socket from "./plugins/socketio.js";
 
 export default {
   name: 'App',
   components: {
-    SelectUsername
+    SelectUsername,
+    Game
   },
   data: function() {
     return {
-      test: true,
       isLoggedIn: false,
-      connectError: null
+      connectError: null,
+      messages: []
     }
   },
   methods: {
     onUsernameSelection(username) {
-      this.loggedIn = true;
+      this.isLoggedIn = true;
       socket.auth = { username };
       socket.connect();
     }
