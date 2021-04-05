@@ -50,11 +50,11 @@ io.use((socket, next) => {
         return next(new Error("Invalid name."));
     }
     if (username.length > 32) {
-        return next(new Error("Names must be less than 32 characters."))
+        return next(new Error("Names must be less than 32 characters."));
     }
     for (let [, socket] of io.of("/").sockets) {
         if (username === socket.username) {
-            return next(new Error("That name is taken."))
+            return next(new Error("That name is taken."));
         }
     }
     socket.username = username;
@@ -86,56 +86,39 @@ io.on("connection", (socket) => {
         }
 
         // echo globally that this client has left
-        socket.broadcast.emit('user has left', {
-            username: socket.username,
-            numUsers: numUsers
+        socket.broadcast.emit("user disconnected", {
+            userID: socket.id,
+            username: socket.username
         });
     });
 
-    socket.on('wordset init', () => {
+    socket.on('initialise letterset', () => {
         if (randomisedLetters.length === 0) {
 
             numLetters.forEach(addLetter);
             shuffleArray(randomisedLetters);
 
-            io.emit('send message', {
-                username: socket.username,
-                message: socket.username + " has initialised the wordset."
-            });
+            io.emit('letterset initialised', socket.username);
 
         } else {
-            io.emit('send message', {
-                username: socket.username,
-                message: socket.username + " attempted to initialise the wordset but it already exists."
-            });
+            io.emit('letterset already exists', socket.username);
         }
     });
 
-    socket.on('letter picked', () => {
+    socket.on('get letter', () => {
         if (randomisedLetters.length !== 0) {
             // Emit message to client who picked letter.
-            socket.emit('you_picked_letter', {
-                message: pickLetter()
-            });
+            socket.emit('picked letter', pickLetter());
             // Emit message to all other than client.
-            socket.broadcast.emit('someone_picked_letter', {
-                username: socket.username
-            });
+            socket.broadcast.emit('someone picked letter', socket.username);
         } else {
-            io.emit('send message', {
-                username: socket.username,
-                message: socket.username + " attempted to get a letter but either the wordset array has not been " +
-                                           "initialised or you've run out of letters!"
-            });
+            io.emit('letterset not initialised', socket.username);
         }
 
     });
 
     socket.on('reset', () => {
         randomisedLetters = [];
-        io.emit('send message', {
-            username: socket.username,
-            message: socket.username + " has reset the game."
-        });
+        io.emit('reset', socket.username);
     });
 });
