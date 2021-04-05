@@ -13,8 +13,6 @@ httpServer.listen(3001, () => {
 
 // Scrabble room
 
-var numUsers = 0;
-
 // Game functions
 var randomisedLetters = []; // The letters available to players in the game. They have been randomised.
 
@@ -83,10 +81,9 @@ io.on("connection", (socket) => {
     // Server functions
 
     socket.on('disconnect', () => {
-        --numUsers;
 
         // Reset the game if everybody has left.
-        if (numUsers.length === 0) {
+        if (io.of("/").sockets.size === 0) {
             randomisedLetters = [];
         }
 
