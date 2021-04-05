@@ -12,6 +12,7 @@
         "start": "node index.js"
     },
     "devDependencies": {
-        "eslint": "^7.21.0"
+        "eslint": "^7.23.0",
+        "eslint-plugin-node": "^11.1.0"
     }
 }
