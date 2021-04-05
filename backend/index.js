@@ -20,12 +20,10 @@ const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M
                   "U", "V", "W", "X", "Y", "Z", "0"];
 const numLetters = [9, 2, 2, 4, 12, 2, 3, 2, 9, 1, 1, 4, 2, 6, 8, 2, 1, 6, 4, 6, 4, 2, 2, 1, 2, 1, 2];
 
-function addLetters(item, index) {
-    var repeatLetter = item;
+function addLetter(item, index) {
     // Add correct number of each letter for a scrabble game
-    while (repeatLetter > 0) {
+    for (let i = item; i > 0; i--) {
         randomisedLetters.push(alphabet[index]);
-        repeatLetter--;
     }
 }
 
@@ -97,7 +95,7 @@ io.on("connection", (socket) => {
     socket.on('wordset init', () => {
         if (randomisedLetters.length === 0) {
 
-            numLetters.forEach(addLetters);
+            numLetters.forEach(addLetter);
             shuffleArray(randomisedLetters);
 
             io.emit('send message', {
