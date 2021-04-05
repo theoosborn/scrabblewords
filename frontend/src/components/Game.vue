@@ -2,23 +2,23 @@
 	<div>
 		<h2>users</h2>
 		<ul>
-			<user-list-item v-for="user in users" v-bind:key="user.userID" :user="user" />
+			<player v-for="player in players" v-bind:key="player.userID" :player="player" />
 		</ul>
 	</div>
 </template>
 
 <script>
-import UserListItem from "./UserListItem.vue"
+import Player from "./Player.vue"
 import socket from "../plugins/socketio.js";
 
 export default {
 	name: "Game",
 	components: {
-		UserListItem
+		Player
 	},
 	data() {
 		return {
-			users: []
+			players: []
 		}
 	},
 	created() {
@@ -27,7 +27,7 @@ export default {
 				user.self = user.userID === socket.id;
 			})
 			// Puts the current user first and sorts by username.
-			this.users = users.sort((a, b) => {
+			this.players = users.sort((a, b) => {
 				if (a.self) return -1;
 				if (b.self) return 1;
 				if (a.username < b.username) return -1;
@@ -35,9 +35,8 @@ export default {
 			})
 		});
 
-		socket.on("user connected", (user) => {
-			console.log("user connected")
-			this.users.push(user);
+		socket.on("user connected", (person) => {
+			this.players.push(person);
 		});
 	}
 }

@@ -51,14 +51,14 @@ function pickLetter() {
 io.use((socket, next) => {
     const username = socket.handshake.auth.username;
     if (!username) {
-        return next(new Error("Invalid username."));
+        return next(new Error("Invalid name."));
     }
     if (username.length > 32) {
-        return next(new Error("Usernames must be less than 32 characters."))
+        return next(new Error("Names must be less than 32 characters."))
     }
     for (let [, socket] of io.of("/").sockets) {
         if (username === socket.username) {
-            return next(new Error("Username is taken."))
+            return next(new Error("That name is taken."))
         }
     }
     socket.username = username;
