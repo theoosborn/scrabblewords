@@ -9,27 +9,27 @@
 </template>
 
 <script>
-    export default {
-        name: "SelectUsername",
-        data () {
-            return {
-                username: ""
-            }
-        },
-        props: {
-            error: Error
-        },
-        methods: {
-            submit() {
-                this.$emit("submit", this.username);
-            }
-        },
-        computed: {
-            isValid() {
-                return this.username.length > 0;
-            }
+export default {
+    name: "SelectUsername",
+    data () {
+        return {
+            username: ""
+        }
+    },
+    props: {
+        error: Error
+    },
+    methods: {
+        submit() {
+            this.$emit("submit", this.username);
+        }
+    },
+    computed: {
+        isValid() {
+            return this.username.length > 0;
         }
     }
+}
 </script>
 
 <style scoped>
