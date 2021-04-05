@@ -4,6 +4,15 @@
     <ul>
       <player v-for="player in players" v-bind:key="player.userID" :player="player" />
     </ul>
+    <h2>log</h2>
+    <ul>
+      <li v-for="message in messages" v-bind:key="message.localID">
+        {{ message.timestamp.toLocaleTimeString('en-GB') }} - {{ message.message }}
+      </li>
+    </ul>
+    <button @click="initialiseLetterset()">Initialise letterset</button>
+    <button @click="getLetter()">Get letter</button>
+    <button @click="reset()">Reset</button>
   </div>
 </template>
 
@@ -18,13 +27,14 @@ export default {
   },
   data () {
     return {
-      players: []
+      players: [],
+      messages: []
     };
   },
   created () {
     socket.on('users', (users) => {
       users.forEach((user) => {
-        user.self = user.userID === socket.id;
+        this.initialisePerson(user);
       });
       // Puts the current user first and sorts by username.
       this.players = users.sort((a, b) => {
@@ -38,6 +48,58 @@ export default {
     socket.on('user connected', (person) => {
       this.players.push(person);
     });
+
+    socket.on('user disconnected', (user) => {
+      this.initialisePerson(user);
+      this.players.splice(this.players.indexOf(user), 1);
+    });
+
+    socket.on('letterset initialised', (username) => {
+      this.addMessage(`${username} initialised the letterset.`);
+    });
+
+    socket.on('letterset already exists', (username) => {
+      this.addMessage(`${username} tried to initialise the letterset but it already exists!`);
+    });
+
+    socket.on('picked letter', (letter) => {
+      this.addMessage(`You picked up ${letter}.`);
+    });
+
+    socket.on('someone picked letter', (username) => {
+      this.addMessage(`${username} picked up a letter`);
+    });
+
+    socket.on('letterset not initialised', (username) => {
+      this.addMessage(`${username} tried to get a letter but the letterset is empty!`);
+    });
+
+    socket.on('reset', (username) => {
+      this.messages = [];
+      this.addMessage(`${username} reset the game.`);
+    });
+  },
+  methods: {
+    initialisePerson (user) {
+      user.self = user.userID === socket.id;
+    },
+    addMessage (message) {
+      const date = new Date(Date.now());
+      this.messages.push({
+        message: message,
+        timestamp: date,
+        localID: Date.now()
+      });
+    },
+    reset () {
+      socket.emit('reset');
+    },
+    initialiseLetterset () {
+      socket.emit('initialise letterset');
+    },
+    getLetter () {
+      socket.emit('get letter');
+    }
   }
 };
 </script>
