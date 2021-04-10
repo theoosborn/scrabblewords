@@ -6,7 +6,8 @@
   "extends": [
     "eslint:recommended",
     "@vue/standard",
-    "plugin:vue/essential"
+    "plugin:vue/essential",
+    "prettier"
   ],
   "parserOptions": {
     "parser": "babel-eslint"
