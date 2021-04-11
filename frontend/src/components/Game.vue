@@ -1,43 +1,56 @@
 <template>
   <div>
-    <h2>Users</h2>
-    <ul>
-      <player v-for="player in players" :key="player.userID" :player="player" />
-    </ul>
-    <h2>Log</h2>
-    <ul>
-      <li v-for="message in messages" :key="message.localID">
-        {{ message.timestamp.toLocaleTimeString('en-GB') }} - {{ message.message }}
-      </li>
-    </ul>
-    <button @click="initialiseLetterset()">Initialise letterset</button>
-    <button @click="getLetter()">Get letter</button>
-    <button @click="reset()">Reset</button>
+    <div class="main">
+      <section>
+        <h2>Log</h2>
+        <ul>
+          <message v-for="message in messages" :key="message.localID">{{
+            message.message
+          }}</message>
+        </ul>
+      </section>
+      <section class="sidebar">
+        <h2>Controls</h2>
+        <button @click="initialiseLetterset()">Initialise letterset</button>
+        <button @click="getLetter()">Get letter</button>
+        <button @click="reset()">Reset</button>
+        <h2>Players - ({{ players.length }})</h2>
+        <ul>
+          <player
+            v-for="player in players"
+            :key="player.userID"
+            :player="player"
+          />
+        </ul>
+      </section>
+    </div>
     <h2>Letter History</h2>
-    <ul>
-      <li v-for="letter in usedLetters" :key="letter.id">{{ letter.name }}</li>
-    </ul>
+    <letter-list :letters="usedLetters"></letter-list>
   </div>
 </template>
 
 <script>
-import Player from './Player.vue';
-import socket from '../plugins/socketio.js';
+import Player from "./Player.vue";
+import socket from "../plugins/socketio.js";
+import Message from "./Message.vue";
+import LetterList from "./LetterList.vue";
 
 export default {
-  name: 'Game',
+  name: "Game",
   components: {
-    Player
+    Player,
+    Message,
+    LetterList,
   },
-  data () {
+  data() {
     return {
       players: [],
       messages: [],
-      usedLetters: []
+      usedLetters: [],
     };
   },
-  created () {
-    socket.on('users', (users) => {
+  created() {
+    socket.on("users", (users) => {
       users.forEach((user) => {
         this.initialisePerson(user);
       });
@@ -50,65 +63,83 @@ export default {
       });
     });
 
-    socket.on('user connected', (person) => {
+    socket.on("user connected", (person) => {
       this.players.push(person);
     });
 
-    socket.on('user disconnected', (user) => {
+    socket.on("user disconnected", (user) => {
       this.initialisePerson(user);
       this.players.splice(this.players.indexOf(user), 1);
     });
 
-    socket.on('letterset initialised', (username) => {
+    socket.on("letterset initialised", (username) => {
       this.addMessage(`${username} initialised the letterset.`);
     });
 
-    socket.on('letterset already exists', (username) => {
-      this.addMessage(`${username} tried to initialise the letterset but it already exists!`);
+    socket.on("letterset already exists", (username) => {
+      this.addMessage(
+        `${username} tried to initialise the letterset but it already exists!`
+      );
     });
 
-    socket.on('picked letter', (letter) => {
-      this.usedLetters.push({
+    socket.on("picked letter", (letter) => {
+      this.usedLetters.unshift({
         id: Date.now(),
-        name: letter
+        name: letter,
       });
-      this.addMessage(`You picked up ${letter}.`);
+      this.addMessage("You picked up a letter.");
     });
 
-    socket.on('someone picked letter', (username) => {
+    socket.on("someone picked letter", (username) => {
       this.addMessage(`${username} picked up a letter`);
     });
 
-    socket.on('letterset not initialised', (username) => {
-      this.addMessage(`${username} tried to get a letter but the letterset is empty!`);
+    socket.on("letterset not initialised", (username) => {
+      this.addMessage(
+        `${username} tried to get a letter but the letterset is empty!`
+      );
     });
 
-    socket.on('reset', (username) => {
+    socket.on("reset", (username) => {
       this.messages = [];
+      this.usedLetters = [];
       this.addMessage(`${username} reset the game.`);
     });
   },
   methods: {
-    initialisePerson (user) {
+    initialisePerson(user) {
       user.self = user.userID === socket.id;
     },
-    addMessage (message) {
-      const date = new Date(Date.now());
+    addMessage(message) {
       this.messages.push({
         message: message,
-        timestamp: date,
-        localID: Date.now()
+        localID: Date.now(),
       });
     },
-    reset () {
-      socket.emit('reset');
+    reset() {
+      socket.emit("reset");
     },
-    initialiseLetterset () {
-      socket.emit('initialise letterset');
+    initialiseLetterset() {
+      socket.emit("initialise letterset");
     },
-    getLetter () {
-      socket.emit('get letter');
-    }
-  }
+    getLetter() {
+      socket.emit("get letter");
+    },
+  },
 };
 </script>
+
+<style scoped>
+.main {
+  display: flex;
+}
+body {
+  margin: 0;
+}
+section {
+  flex: 3;
+}
+.sidebar {
+  flex: 1;
+}
+</style>
