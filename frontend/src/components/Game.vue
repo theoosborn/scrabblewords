@@ -25,8 +25,6 @@
         </ul>
       </section>
     </div>
-    <h2>Letter History</h2>
-    <letter-list :letters="usedLetters"></letter-list>
   </div>
 </template>
 
@@ -34,14 +32,12 @@
 import Player from "./Player.vue";
 import socket from "../plugins/socketio.js";
 import Message from "./Message.vue";
-import LetterList from "./LetterList.vue";
 
 export default {
   name: "Game",
   components: {
     Player,
     Message,
-    LetterList,
   },
   data() {
     return {
