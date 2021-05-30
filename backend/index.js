@@ -114,7 +114,7 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-    const users = [];
+    let users = [];
     for (let [id, socket] of io.of("/").sockets) {
         users.push({
             userID: id,
