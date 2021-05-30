@@ -1,7 +1,7 @@
 <template>
     <div>
         <label>Please enter your username:
-            <input v-model="name" type="text" id="name" required>
+            <input v-model="name" type="text" id="name" required v-on:keyup.enter="submit()">
         </label>
         <button :disabled="!isValid" @click="submit()">Login</button>
         <p v-if="error" class="error">{{ error.message }}</p>
@@ -21,7 +21,9 @@ export default {
   },
   methods: {
     submit () {
-      this.$emit('submit', this.name);
+      if (this.isValid) {
+        this.$emit('submit', this.name);
+      }
     }
   },
   computed: {
