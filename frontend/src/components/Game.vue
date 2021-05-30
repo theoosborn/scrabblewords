@@ -133,9 +133,6 @@ export default {
 .main {
   display: flex;
 }
-body {
-  margin: 0;
-}
 section {
   flex: 3;
 }
