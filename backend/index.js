@@ -90,9 +90,17 @@ function shuffleArray(array) {
     }
 }
 
-function pickLetter() {
+function pickLetter(socket) {
     let letterPicked = randomisedLetters.pop();
+    socket.usedLetters.push({
+        name: letterPicked
+    });
     return letterPicked;
+}
+
+function resetGame(socket) {
+    randomisedLetters = [];
+    socket.usedLetters = [];
 }
 
 // Middleware to handle login.
@@ -110,6 +118,7 @@ io.use((socket, next) => {
         }
     }
     socket.username = username;
+    socket.usedLetters = [];
     next();
 });
 
@@ -132,7 +141,7 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         // Reset the game if everybody has left.
         if (io.of("/").sockets.size === 0) {
-            randomisedLetters = [];
+            resetGame(socket);
         }
 
         // echo globally that this client has left
@@ -156,7 +165,7 @@ io.on("connection", (socket) => {
     socket.on("get letter", () => {
         if (randomisedLetters.length !== 0) {
             // Emit message to client who picked letter.
-            socket.emit("picked letter", pickLetter());
+            socket.emit("picked letter", pickLetter(socket));
             // Emit message to all other than client.
             socket.broadcast.emit("someone picked letter", socket.username);
         } else {
@@ -165,7 +174,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("reset", () => {
-        randomisedLetters = [];
+        resetGame(socket);
         io.emit("reset", socket.username);
     });
 });
