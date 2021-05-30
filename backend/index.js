@@ -177,4 +177,13 @@ io.on("connection", (socket) => {
         resetGame(socket);
         io.emit("reset", socket.username);
     });
+
+    socket.on("undo letter", () => {
+        if (socket.usedLetters.length > 0) {
+            let letter = socket.usedLetters.pop();
+            randomisedLetters.push(letter);
+            shuffleArray(randomisedLetters);
+            socket.emit("undid letter", letter);
+        }
+    });
 });
