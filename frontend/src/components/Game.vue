@@ -14,6 +14,7 @@
         <button @click="initialiseLetterset()">Initialise letterset</button>
         <button @click="getLetter()">Get letter</button>
         <button @click="reset()">Reset</button>
+        <button @click="undo()">Put back</button>
         <h2>Players - ({{ players.length }})</h2>
         <ul>
           <player
@@ -125,6 +126,9 @@ export default {
     getLetter() {
       socket.emit("get letter");
     },
+    undo() {
+      socket.emit("undo letter");
+    }
   },
 };
 </script>
