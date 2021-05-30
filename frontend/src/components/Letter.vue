@@ -10,13 +10,14 @@ export default {
 
 <style scoped>
 span.letter {
-  border: 2px;
+  border-width: 0.1em;
   border-color: #000000;
   border-style: solid;
-  text-align: center;
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-  margin: 0 5px;
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.1em;
 }
 </style>
