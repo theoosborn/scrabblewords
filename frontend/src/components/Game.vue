@@ -74,9 +74,13 @@ export default {
       this.addMessage("picked letter", letter);
     });
 
-    socket.on("undid letter", (letter) => {
+    socket.on("put back letter", (letter) => {
       this.usedLetters.splice(this.usedLetters.indexOf(letter), 1);
-      this.addMessage("undid letter", letter);
+      this.addMessage("put back letter", letter);
+    });
+
+    socket.on("someone put back letter", (user, letter) => {
+      this.addMessage(user + " put back a letter.");
     });
 
     socket.on("someone picked letter", (username) => {

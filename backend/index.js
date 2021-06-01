@@ -172,7 +172,8 @@ io.on("connection", (socket) => {
             let letter = socket.usedLetters.pop();
             randomisedLetters.push(letter);
             shuffleArray(randomisedLetters);
-            socket.emit("undid letter", letter);
+            socket.emit("put back letter", letter);
+            socket.broadcast.emit("someone put back letter", socket.username);
         }
     });
 });

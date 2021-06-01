@@ -5,7 +5,7 @@
       You picked up
       <letter>{{ message.letter }}</letter>
     </template>
-    <template v-else-if="message.message === 'undid letter'">
+    <template v-else-if="message.message === 'put back letter'">
       You put back
       <letter>{{ message.letter }}</letter>
     </template>
