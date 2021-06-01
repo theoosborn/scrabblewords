@@ -14,7 +14,7 @@
         <button @click="getLetter()">Get letter</button>
         <button @click="reset()">Reset</button>
         <button @click="undo()">Put back</button>
-        <h2>Players - ({{ players.length }})</h2>
+        <h2>{{ players.length }} player<template v-if="players.length !== 1">s</template></h2>
         <ul>
           <player
             v-for="player in players"
