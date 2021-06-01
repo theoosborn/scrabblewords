@@ -8,14 +8,7 @@
       v-if="!isLoggedIn"
       @submit="onUsernameSelection"
     />
-    <div v-else>
-      <ul>
-        <li v-for="message in messages" v-bind:key="message.received">
-          {{ message }}
-        </li>
-      </ul>
-      <game />
-    </div>
+    <game v-else />
   </div>
 </template>
 
@@ -34,7 +27,6 @@ export default {
     return {
       isLoggedIn: false,
       connectError: null,
-      messages: [],
     };
   },
   methods: {
