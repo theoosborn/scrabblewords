@@ -92,9 +92,7 @@ function shuffleArray(array) {
 
 function pickLetter(socket) {
     let letterPicked = randomisedLetters.pop();
-    socket.usedLetters.push({
-        name: letterPicked
-    });
+    socket.usedLetters.push(letterPicked);
     return letterPicked;
 }
 
