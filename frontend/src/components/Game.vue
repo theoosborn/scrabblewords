@@ -4,9 +4,7 @@
       <section>
         <h2>Log</h2>
         <ul>
-          <message v-for="message in messages" :key="message.localID">{{
-            message.message
-          }}</message>
+          <message v-for="message in messages" :key="message.time" :message="message"></message>
         </ul>
       </section>
       <section class="sidebar">
@@ -73,7 +71,12 @@ export default {
         id: Date.now(),
         name: letter,
       });
-      this.addMessage("You picked up a letter.");
+      this.addMessage("picked letter", letter);
+    });
+
+    socket.on("undid letter", (letter) => {
+      this.usedLetters.splice(this.usedLetters.indexOf(letter), 1);
+      this.addMessage("undid letter", letter);
     });
 
     socket.on("someone picked letter", (username) => {
@@ -96,10 +99,11 @@ export default {
     initialisePerson(user) {
       user.self = user.userID === socket.id;
     },
-    addMessage(message) {
+    addMessage(message, letter) {
       this.messages.push({
         message: message,
-        localID: Date.now(),
+        time: Date.now(),
+        letter: letter,
       });
     },
     reset() {
