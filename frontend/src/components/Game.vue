@@ -11,7 +11,6 @@
       </section>
       <section class="sidebar">
         <h2>Controls</h2>
-        <button @click="initialiseLetterset()">Initialise letterset</button>
         <button @click="getLetter()">Get letter</button>
         <button @click="reset()">Reset</button>
         <button @click="undo()">Put back</button>
@@ -69,16 +68,6 @@ export default {
       this.players.splice(this.players.indexOf(user), 1);
     });
 
-    socket.on("letterset initialised", (username) => {
-      this.addMessage(`${username} initialised the letterset.`);
-    });
-
-    socket.on("letterset already exists", (username) => {
-      this.addMessage(
-        `${username} tried to initialise the letterset but it already exists!`
-      );
-    });
-
     socket.on("picked letter", (letter) => {
       this.usedLetters.unshift({
         id: Date.now(),
@@ -115,9 +104,6 @@ export default {
     },
     reset() {
       socket.emit("reset");
-    },
-    initialiseLetterset() {
-      socket.emit("initialise letterset");
     },
     getLetter() {
       socket.emit("get letter");

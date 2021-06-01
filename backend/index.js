@@ -101,6 +101,8 @@ function pickLetter(socket) {
 function resetGame(socket) {
     randomisedLetters = [];
     socket.usedLetters = [];
+    numLetters.forEach(addLetter);
+    shuffleArray(randomisedLetters);
 }
 
 // Middleware to handle login.
@@ -149,17 +151,6 @@ io.on("connection", (socket) => {
             userID: socket.id,
             username: socket.username,
         });
-    });
-
-    socket.on("initialise letterset", () => {
-        if (randomisedLetters.length === 0) {
-            numLetters.forEach(addLetter);
-            shuffleArray(randomisedLetters);
-
-            io.emit("letterset initialised", socket.username);
-        } else {
-            io.emit("letterset already exists", socket.username);
-        }
     });
 
     socket.on("get letter", () => {
