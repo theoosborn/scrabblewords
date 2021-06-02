@@ -4,7 +4,7 @@
       <section>
         <h2>Log</h2>
         <ul class="messages">
-          <message v-for="message in messages" :key="message.time" :message="message"></message>
+          <message ref="message" v-for="message in messages" :key="message.time" :message="message"></message>
         </ul>
       </section>
       <section class="sidebar">
@@ -109,6 +109,7 @@ export default {
         time: Date.now(),
         letter: letter,
       });
+      this.$nextTick(() => this.$refs.message[this.$refs.message.length - 1].$el.scrollIntoView({alignToTop: false}));
     },
     reset() {
       socket.emit("reset");
