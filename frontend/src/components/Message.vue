@@ -36,6 +36,6 @@ export default {
 
 <style scoped>
 li {
-  margin-top:  5em;
+  margin-top:  1em;
 }
 </style>
