@@ -3,7 +3,7 @@
     <div class="main">
       <section>
         <h2>Log</h2>
-        <ul>
+        <ul class="messages">
           <message v-for="message in messages" :key="message.time" :message="message"></message>
         </ul>
       </section>
@@ -132,5 +132,11 @@ section {
 }
 .sidebar {
   flex: 1;
+}
+.messages {
+  overflow-y: scroll;
+  height: 70vh;
+  border-style: solid;
+  list-style-type: none;
 }
 </style>

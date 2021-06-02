@@ -46,12 +46,21 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap');
+html {
+  font-family: Merriweather, serif;
+  background-color: #ffedcb;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 20px;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+#app {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1000px;
 }
 </style>
