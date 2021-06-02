@@ -79,7 +79,7 @@ export default {
       this.addMessage("put back letter", letter);
     });
 
-    socket.on("someone put back letter", (user, letter) => {
+    socket.on("someone put back letter", (user) => {
       this.addMessage(user + " put back a letter.");
     });
 
