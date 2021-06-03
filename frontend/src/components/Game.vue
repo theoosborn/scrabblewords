@@ -49,20 +49,15 @@ export default {
         this.initialisePerson(user);
       });
       // Puts the current user first and sorts by username.
-      this.players = users.sort((a, b) => {
-        if (a.self) return -1;
-        if (b.self) return 1;
-        if (a.username < b.username) return -1;
-        return a.username > b.username ? 1 : 0;
-      });
+      this.players = this.sortPlayers(users);
     });
 
     socket.on("user connected", (person) => {
       this.players.push(person);
+      this.players = this.sortPlayers(this.players);
     });
 
     socket.on("user disconnected", (user) => {
-      this.initialisePerson(user);
       this.players.splice(this.players.indexOf(user), 1);
     });
 
@@ -121,6 +116,14 @@ export default {
     },
     undo() {
       socket.emit("undo letter");
+    },
+    sortPlayers(players) {
+      players.sort((a, b) => {
+        if (a.self) return -1;
+        if (b.self) return 1;
+        if (a.username < b.username) return -1;
+        return a.username > b.username ? 1 : 0;
+      });
     }
   },
 };
