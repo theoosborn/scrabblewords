@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     onUsernameSelection(username) {
-      this.isLoggedIn = true;
       socket.auth = { username };
       socket.connect();
     },
@@ -40,6 +39,10 @@ export default {
     socket.on("connect_error", (err) => {
       this.connectError = err;
       this.isLoggedIn = false;
+    });
+
+    socket.on("connect", () => {
+      this.isLoggedIn = true;
     });
   },
 };
