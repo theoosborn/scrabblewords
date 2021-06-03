@@ -112,7 +112,9 @@ export default {
       this.$nextTick(() => this.$refs.message[this.$refs.message.length - 1].$el.scrollIntoView({alignToTop: false}));
     },
     reset() {
-      socket.emit("reset");
+      if (window.confirm("Are you sure you want to reset the game? All progress will be lost.")) {
+        socket.emit("reset");
+      }
     },
     getLetter() {
       socket.emit("get letter");
