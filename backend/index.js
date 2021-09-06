@@ -1,8 +1,11 @@
+// Import environment variables
+require('dotenv').config();
+
 // Setup http server
 const httpServer = require("http").createServer();
 const io = require("socket.io")(httpServer, {
     cors: {
-        origin: "http://localhost:8080",
+        origin: process.env.CORS_ORIGIN,
         methods: ["GET", "POST"],
     },
 });
