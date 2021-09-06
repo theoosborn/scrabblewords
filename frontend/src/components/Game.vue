@@ -77,9 +77,6 @@ export default {
     });
   },
   methods: {
-    initialisePerson(user) {
-      user.self = user.userID === socket.id;
-    },
     addMessage(message, letter) {
       this.messages.push({
         message: message,
@@ -99,14 +96,6 @@ export default {
     undo() {
       socket.emit("undo letter");
     },
-    sortPlayers(players) {
-      players.sort((a, b) => {
-        if (a.self) return -1;
-        if (b.self) return 1;
-        if (a.username < b.username) return -1;
-        return a.username > b.username ? 1 : 0;
-      });
-    }
   },
 };
 </script>
