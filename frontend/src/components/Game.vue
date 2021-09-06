@@ -57,11 +57,11 @@ export default {
     });
 
     socket.on("user connected", (person) => {
-      this.addMessage(`${person.username} has joined the game.`);
+      this.addMessage(`${person.username} joined the game.`);
     });
 
     socket.on("user disconnected", (user) => {
-      this.addMessage(`${user.username} has left the game.`);
+      this.addMessage(`${user.username} left the game.`);
     });
 
     socket.on("picked letter", (letter) => {
