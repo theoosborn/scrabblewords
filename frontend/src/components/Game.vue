@@ -35,6 +35,27 @@ export default {
   },
   created() {
 
+    // Let the server know that the user has joined and can be sent a user list.
+    socket.emit("loaded");
+
+    socket.on("users", (users) => {
+      if (users.length > 1) {
+        const lastUser = users.pop().username;
+
+        var usernameList = [];
+        users.forEach(user => {
+
+          usernameList.push(user.username);
+        });
+
+        this.addMessage(`${usernameList.join(", ")} and ${lastUser} are already in the game.`);
+      } else if (users.length === 1) {
+        this.addMessage(`${users[0].username} is already in the game.`);
+      } else {
+        this.addMessage("Currently, there are no users in this game.");
+      }
+    });
+
     socket.on("user connected", (person) => {
       this.addMessage(`${person.username} has joined the game.`);
     });

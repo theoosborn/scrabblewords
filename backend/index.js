@@ -123,20 +123,27 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
-    let users = [];
-    for (let [id, socket] of io.of("/").sockets) {
-        users.push({
-            userID: id,
+    // Server functions
+
+    socket.on("loaded", () => {
+        let users = [];
+        for (let [id, userSocket] of io.of("/").sockets) {
+            // Only send other users that are already connected.
+            if (socket.id !== id) {
+                users.push({
+                    userID: id,
+                    username: userSocket.username,
+                });
+            }
+        }
+
+
+        socket.emit("users", users);
+        io.emit("user connected", {
+            userID: socket.id,
             username: socket.username,
         });
-    }
-    socket.emit("users", users);
-    socket.broadcast.emit("user connected", {
-        userID: socket.id,
-        username: socket.username,
     });
-
-    // Server functions
 
     socket.on("disconnect", () => {
         // Reset the game if everybody has left.
