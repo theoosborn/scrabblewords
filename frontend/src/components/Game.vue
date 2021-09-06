@@ -12,28 +12,18 @@
         <button @click="getLetter()">Get letter</button>
         <button @click="reset()">Reset</button>
         <button @click="undo()">Put back</button>
-        <h2>{{ players.length }} player<template v-if="players.length !== 1">s</template></h2>
-        <ul>
-          <player
-            v-for="player in players"
-            :key="player.userID"
-            :player="player"
-          />
-        </ul>
       </section>
     </div>
   </div>
 </template>
 
 <script>
-import Player from "./Player.vue";
 import socket from "../plugins/socketio.js";
 import Message from "./Message.vue";
 
 export default {
   name: "Game",
   components: {
-    Player,
     Message,
   },
   data() {
@@ -44,21 +34,13 @@ export default {
     };
   },
   created() {
-    socket.on("users", (users) => {
-      users.forEach((user) => {
-        this.initialisePerson(user);
-      });
-      // Puts the current user first and sorts by username.
-      this.players = this.sortPlayers(users);
-    });
 
     socket.on("user connected", (person) => {
-      this.players.push(person);
-      this.players = this.sortPlayers(this.players);
+      this.addMessage(`${person.username} has joined the game.`);
     });
 
     socket.on("user disconnected", (user) => {
-      this.players.splice(this.players.indexOf(user), 1);
+      this.addMessage(`${user.username} has left the game.`);
     });
 
     socket.on("picked letter", (letter) => {
