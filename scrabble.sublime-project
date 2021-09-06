@@ -1,0 +1,30 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+		}
+	],
+	"settings":
+	{
+		"LSP":
+		{
+			"lsp-css":
+			{
+				"enabled": true,
+			},
+			"lsp-stylelint":
+			{
+				"enabled": true,
+			},
+			"lsp-vue":
+			{
+				"enabled": true,
+			},
+			"LSP-typescript":
+			{
+				"enabled": true,
+			},
+		},
+	},
+}
