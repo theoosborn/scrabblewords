@@ -115,7 +115,7 @@ export default {
       socket.emit("get letter");
     },
     undo() {
-      if (window.confirm(`Are you sure you want to return ${this.usedLetters[0].letter}?`)) {
+      if (window.confirm(`Are you sure you want to return ${this.usedLetters[0].name}?`)) {
         socket.emit("undo letter");
       }
     },
