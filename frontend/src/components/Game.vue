@@ -115,7 +115,9 @@ export default {
       socket.emit("get letter");
     },
     undo() {
-      socket.emit("undo letter");
+      if (window.confirm(`Are you sure you want to return ${this.usedLetters[0].letter}?`)) {
+        socket.emit("undo letter");
+      }
     },
   },
 };
