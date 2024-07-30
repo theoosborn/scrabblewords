@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const URL = process.env.VUE_APP_SERVER_ADDRESS;
+const URL = import.meta.env.VUE_APP_SERVER_ADDRESS;
 
 const socket = io(URL, { autoConnect: false });
 
