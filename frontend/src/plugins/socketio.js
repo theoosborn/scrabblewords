@@ -1,6 +1,6 @@
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-const URL = import.meta.env.VUE_APP_SERVER_ADDRESS;
+const URL = import.meta.env.VITE_APP_SERVER_ADDRESS;
 
 const socket = io(URL, { autoConnect: false });
 
