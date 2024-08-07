@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import './../node_modules/normalize.css/normalize.css';
+import './style.css';
 
 const app = createApp(App)
 
