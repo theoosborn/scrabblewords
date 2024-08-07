@@ -11,7 +11,7 @@
         <h2>Controls</h2>
         <button @click="getLetter()">Get letter</button>
         <button @click="reset()">Reset</button>
-        <button @click="undo()">Put back</button>
+        <button @click="undo()" :disabled="usedLetters.length == 0">Put back</button>
       </section>
     </div>
   </div>
