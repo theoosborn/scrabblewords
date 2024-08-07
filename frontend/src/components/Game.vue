@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <div class="main">
-      <section>
-        <h2>Log</h2>
-        <ul class="messages">
-          <message ref="message" v-for="message in messages" :key="message.time" :message="message"></message>
-        </ul>
-      </section>
-      <section class="sidebar">
-        <h2>Controls</h2>
-        <button @click="getLetter()">Get letter</button>
-        <button @click="reset()">Reset</button>
-        <button @click="undo()" :disabled="usedLetters.length == 0">Put back</button>
-      </section>
-    </div>
+  <div class="flex mt-5 gap-10 flex-wrap">
+    <section class="flex-1">
+      <h2 class="text-3xl mb-2">Log</h2>
+      <ul class="border-2 border-black overflow-y-scroll list-none" style="height: 70vh">
+        <message ref="message" v-for="message in messages" :key="message.time" :message="message"></message>
+      </ul>
+    </section>
+    <section class="w-1/5">
+      <h2 class="text-3xl mb-2">Controls</h2>
+      <div class="flex flex-col gap-3">
+        <button class="button bg-blue-400 text-gray-100" @click="getLetter()">Get letter</button>
+        <button class="button bg-red-500 text-gray-100" @click="reset()">Reset</button>
+        <button class="button bg-yellow-600 text-gray-100" @click="undo()" :disabled="usedLetters.length == 0">Put back</button>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -122,21 +122,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.main {
-  display: flex;
-}
-section {
-  flex: 3;
-}
-.sidebar {
-  flex: 1;
-}
-.messages {
-  overflow-y: scroll;
-  height: 70vh;
-  border-style: solid;
-  list-style-type: none;
-}
-</style>

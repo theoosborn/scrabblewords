@@ -1,12 +1,14 @@
 <template>
-  <div id="app">
-    <header class="header">
-      <h1>crabble</h1>
+  <div class="container mx-auto text-center text-xl h-screen">
+    <header class="border-b-2 border-black">
+      <h1 class="uppercase text-4xl">crabble</h1>
+      <p>To creep, crawl, or clamber, like a crab.</p>
     </header>
     <select-username
       :error="connectError"
       v-if="!isLoggedIn"
       @submit="onUsernameSelection"
+      class="grow place-content-center"
     />
     <game v-else />
   </div>
@@ -47,23 +49,3 @@ export default {
   },
 };
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;900&display=swap');
-html {
-  font-family: Merriweather, serif;
-  background-color: #ffedcb;
-  text-align: center;
-  font-size: 20px;
-}
-
-h1 {
-  text-transform: uppercase;
-}
-
-#app {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1000px;
-}
-</style>
