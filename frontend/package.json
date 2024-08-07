@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,11 +10,9 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "@vue/compat": "^3.1.0",
     "normalize.css": "^8.0.1",
     "socket.io-client": "^4.7.5",
-    "vue": "^3.1.0",
-    "vue-force-next-tick": "^1.1.0"
+    "vue": "^3.4.36"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.6.2",
@@ -25,7 +24,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^9.27.0",
     "prettier": "2.2.1",
-    "vite": "^4.5.3"
+    "vite": "^5.4.0"
   },
   "browserslist": [
     "> 1%",
