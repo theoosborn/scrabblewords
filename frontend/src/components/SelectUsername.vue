@@ -4,7 +4,7 @@
     <input v-model="name" type="text" id="name" class="border-2 border-black rounded-lg p-2" required
       v-on:keyup.enter="submit()" autocomplete="off">
     <button
-      class="button w-20 bg-green-800 text-gray-100"
+      class="button w-20 bg-green-800 text-gray-100 transition ease-in-out hover:scale-110 duration-200"
       :disabled="!isValid" @click="submit()">Play</button>
     <Transition>
       <p v-if="error" class="text-red-500">{{ error.message }}</p>

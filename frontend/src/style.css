@@ -7,5 +7,5 @@ html {
 }
 
 .button {
-	@apply border-2 border-black rounded-lg p-2 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:border-slate-300 disabled:text-slate-400 transition ease-in-out hover:scale-110 duration-200;
+	@apply border-2 border-black rounded-lg p-2 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:border-slate-300 disabled:text-slate-400;
 }

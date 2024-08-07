@@ -3,11 +3,11 @@
     {{ timestamp }} -
     <template v-if="message.message === 'picked letter'">
       You picked up
-      <letter>{{ message.letter }}</letter>
+      <letter :char="message.letter"></letter>
     </template>
     <template v-else-if="message.message === 'put back letter'">
       You put back
-      <letter>{{ message.letter }}</letter>
+      <letter :char="message.letter"></letter>
     </template>
     <template v-else>
       {{ message.message }}
