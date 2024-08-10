@@ -95,13 +95,13 @@ function shuffleArray(array) {
 
 function pickLetter(socket) {
     let letterPicked = randomisedLetters.pop();
-    socket.usedLetters.push(letterPicked);
+    socket.data.usedLetters.push(letterPicked);
     return letterPicked;
 }
 
 function resetGame(socket) {
     randomisedLetters = [];
-    socket.usedLetters = [];
+    socket.data.usedLetters = [];
     numLetters.forEach(addLetter);
     shuffleArray(randomisedLetters);
 }
@@ -109,6 +109,7 @@ function resetGame(socket) {
 // Middleware to handle login.
 io.use((socket, next) => {
     const username = socket.handshake.auth.username;
+    const room = socket.handshake.auth.room;
     if (!username) {
         return next(new Error("Invalid name."));
     }
@@ -120,8 +121,12 @@ io.use((socket, next) => {
             return next(new Error("That name is taken."));
         }
     }
-    socket.username = username;
-    socket.usedLetters = [];
+
+    socket.join(room);
+
+    socket.data.username = username;
+    socket.data.room = room;
+    socket.data.usedLetters = [];
     next();
 });
 
@@ -135,16 +140,16 @@ io.on("connection", (socket) => {
             if (socket.id !== id) {
                 users.push({
                     userID: id,
-                    username: userSocket.username,
+                    username: userSocket.data.username,
                 });
             }
         }
 
 
         socket.emit("users", users);
-        io.emit("user connected", {
+        io.to(socket.data.room).emit("user connected", {
             userID: socket.id,
-            username: socket.username,
+            username: socket.data.username,
         });
     });
 
@@ -155,9 +160,9 @@ io.on("connection", (socket) => {
         }
 
         // echo globally that this client has left
-        socket.broadcast.emit("user disconnected", {
+        socket.broadcast.to(socket.data.room).emit("user disconnected", {
             userID: socket.id,
-            username: socket.username,
+            username: socket.data.username,
         });
     });
 
@@ -166,24 +171,24 @@ io.on("connection", (socket) => {
             // Emit message to client who picked letter.
             socket.emit("picked letter", pickLetter(socket));
             // Emit message to all other than client.
-            socket.broadcast.emit("someone picked letter", socket.username);
+            socket.broadcast.to(socket.data.room).emit("someone picked letter", socket.data.username);
         } else {
-            io.emit("letterset not initialised", socket.username);
+            io.emit("letterset not initialised", socket.data.username);
         }
     });
 
     socket.on("reset", () => {
         resetGame(socket);
-        io.emit("reset", socket.username);
+        io.emit("reset", socket.data.username);
     });
 
     socket.on("undo letter", () => {
-        if (socket.usedLetters.length > 0) {
-            let letter = socket.usedLetters.pop();
+        if (socket.data.usedLetters.length > 0) {
+            let letter = socket.data.usedLetters.pop();
             randomisedLetters.push(letter);
             shuffleArray(randomisedLetters);
             socket.emit("put back letter", letter);
-            socket.broadcast.emit("someone put back letter", socket.username);
+            socket.broadcast.to(socket.data.room).emit("someone put back letter", socket.data.username);
         }
     });
 });
