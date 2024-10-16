@@ -2,7 +2,6 @@
   <div class="container mx-auto text-center text-xl h-screen">
     <header class="border-b-2 border-black">
       <h1 class="uppercase text-4xl">crabble</h1>
-      <p>To creep, crawl, or clamber, like a crab.</p>
     </header>
     <select-username
       :error="connectError"
