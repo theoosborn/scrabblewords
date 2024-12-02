@@ -10,11 +10,16 @@
         "socket.io": "^4.7.5"
     },
     "scripts": {
-        "start": "node index.js"
+        "start": "node dist/index.js",
+        "dev": "ts-node src/index.ts",
+        "build": "tsc"
     },
     "devDependencies": {
+        "@types/node": "^22.10.1",
         "eslint": "^7.23.0",
         "eslint-plugin-node": "^11.1.0",
-        "prettier": "2.2.1"
+        "prettier": "2.2.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2"
     }
 }

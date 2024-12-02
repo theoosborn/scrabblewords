@@ -1,23 +1,21 @@
 // Import environment variables
-require('dotenv').config();
+import 'dotenv/config'
+import { Server, Socket } from 'socket.io';
 
-// Setup http server
-const httpServer = require("http").createServer();
-const io = require("socket.io")(httpServer, {
+// Setup server
+const io = new Server({
     cors: {
         origin: process.env.CORS_ORIGIN,
         methods: ["GET", "POST"],
     },
 });
 
-httpServer.listen(3001, () => {
-    console.log("Server listening at port 3001");
-});
+io.listen(3001);
 
 // Scrabble room
 
 // Game functions
-var randomisedLetters = []; // The letters available to players in the game. They have been randomised.
+var randomisedLetters: string[] = []; // The letters available to players in the game. They have been randomised.
 
 const alphabet = [
     "A",
@@ -78,7 +76,7 @@ const numLetters = [
     2,
 ];
 
-function addLetter(item, index) {
+function addLetter(item: number, index: number) {
     // Add correct number of each letter for a scrabble game
     for (let i = item; i > 0; i--) {
         randomisedLetters.push(alphabet[index]);
@@ -86,20 +84,20 @@ function addLetter(item, index) {
 }
 
 // Durstenfeld shuffle the array
-function shuffleArray(array) {
+function shuffleArray(array: string[]) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-function pickLetter(socket) {
+function pickLetter(socket: Socket) {
     let letterPicked = randomisedLetters.pop();
     socket.data.usedLetters.push(letterPicked);
     return letterPicked;
 }
 
-function resetGame(socket) {
+function resetGame(socket: Socket) {
     randomisedLetters = [];
     socket.data.usedLetters = [];
     numLetters.forEach(addLetter);
@@ -117,7 +115,7 @@ io.use((socket, next) => {
         return next(new Error("Names must be less than 32 characters."));
     }
     for (let [, socket] of io.of("/").sockets) {
-        if (username === socket.username) {
+        if (username === socket.data.username) {
             return next(new Error("That name is taken."));
         }
     }
