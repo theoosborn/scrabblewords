@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+const name = ref('')
+
+const props = defineProps<{error: Error | null}>()
+
+const emit = defineEmits(['submit'])
+
+function submit() {
+  if (isValid) {
+    emit('submit', name.value);
+  }
+}
+
+const isValid = computed(() => {
+  return name.value.length > 0;
+})
+
+</script>
+
 <template>
   <div class="flex flex-col max-w-md gap-4 mt-40 mx-auto items-center">
     <label for="name">Please enter your nickname:</label>
@@ -11,32 +32,6 @@
     </Transition>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'SelectUsername',
-  data() {
-    return {
-      name: ''
-    };
-  },
-  props: {
-    error: Error
-  },
-  methods: {
-    submit() {
-      if (this.isValid) {
-        this.$emit('submit', this.name);
-      }
-    }
-  },
-  computed: {
-    isValid() {
-      return this.name.length > 0;
-    }
-  }
-};
-</script>
 
 <style scoped>
 .v-enter-active,

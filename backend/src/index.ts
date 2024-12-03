@@ -137,8 +137,8 @@ io.on("connection", (socket) => {
             // Only send other users that are already connected.
             if (socket.id !== id) {
                 users.push({
-                    userID: id,
-                    username: userSocket.data.username,
+                    id: id,
+                    name: userSocket.data.username,
                 });
             }
         }
@@ -146,8 +146,8 @@ io.on("connection", (socket) => {
 
         socket.emit("users", users);
         io.to(socket.data.room).emit("user connected", {
-            userID: socket.id,
-            username: socket.data.username,
+            id: socket.id,
+            name: socket.data.username,
         });
     });
 
@@ -159,8 +159,8 @@ io.on("connection", (socket) => {
 
         // echo globally that this client has left
         socket.broadcast.to(socket.data.room).emit("user disconnected", {
-            userID: socket.id,
-            username: socket.data.username,
+            id: socket.id,
+            name: socket.data.username,
         });
     });
 

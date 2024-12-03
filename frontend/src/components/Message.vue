@@ -1,11 +1,24 @@
+<script setup lang="ts">
+import { computed } from "vue";
+import Letter from "./Letter.vue";
+import type { Message } from "../types";
+
+const props = defineProps<{message: Message}>();
+
+const timestamp = computed(() => {
+  return new Date(props.message.time).toLocaleTimeString("en-GB");
+});
+
+</script>
+
 <template>
   <li>
     {{ timestamp }} -
-    <template v-if="message.message === 'picked letter'">
+    <template v-if="message.letter && message.message === 'picked letter'">
       You picked up
       <letter :char="message.letter"></letter>
     </template>
-    <template v-else-if="message.message === 'put back letter'">
+    <template v-else-if="message.letter && message.message === 'put back letter'">
       You put back
       <letter :char="message.letter"></letter>
     </template>
@@ -14,25 +27,6 @@
     </template>
   </li>
 </template>
-
-<script>
-import Letter from "./Letter.vue";
-
-export default {
-  name: "Message",
-  components: { Letter },
-  props: {
-    message: {
-      type: Object,
-    }
-  },
-  computed: {
-    timestamp: function () {
-      return new Date(this.message.time).toLocaleTimeString("en-GB");
-    },
-  },
-};
-</script>
 
 <style scoped>
 li {
